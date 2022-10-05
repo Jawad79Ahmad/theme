@@ -1,0 +1,50 @@
+  <!DOCTYPE html>
+<html>
+    <head>
+        <%# <link href='https://cdn.lineicons.com/1.0.1/LineIcons.min.css' rel='stylesheet'> %>
+        <title>My Ptoject</title>
+        <%= csrf_meta_tags %>
+        <%= csp_meta_tag %>
+        <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+        <%= stylesheet_pack_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+        <% if yield(:no_cache) %>
+            <meta name="turbolinks-cache-control" content="no-cache">
+        <% end %>
+
+    </head>
+
+    <body>
+        <!-- Preloader -->
+        <div class="">
+            <div class="d-table">
+                <div class="d-tablecell">
+                    <span class="loader">
+                        <span class="loader-inner"></span>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <!-- End Preloader -->
+        <!-- Skip Main layout, sidebar, header on authentication -->
+        <% if (controller_name === 'auth') || current_user == nil %>
+            <%= yield %>
+        <% else %>
+            <%= render partial: "layouts/loader" %>
+            <%= render partial: "layouts/navbar" %>
+            <%= render partial: "layouts/sidebar" %>
+            <!-- Main Content Wrapper -->
+            <div class="main-content d-flex flex-column hide-sidemenu">
+                <% if alert || notice %>
+                  <div class="alert <%= alert.nil? ? 'alert-info' : 'alert-danger' %> alert-dismissible fade show" role="alert">
+                      <%= alert || notice %>
+                      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                      </button>
+                  </div>
+                <% end %>
+                <%= yield %>
+                <%= render partial: "layouts/footer" %>
+            </div>
+        <% end %>
+    </body>
+</html>
